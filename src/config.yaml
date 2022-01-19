@@ -1,0 +1,29 @@
+twitter-auth:
+    CONSUMER_KEY: ""
+    CONSUMER_SECRET: ""
+    ACCESS_TOKEN: ""
+    ACCESS_TOKEN_SECRET: ""
+
+neuralspace-nlu-auth:
+    MODEL_ID: ""
+    ACCESS_TOKEN: ""
+    neuralspace_nlu_url: "https://platform-dev.neuralspace.ai/api/nlu/v1/model/parse"
+
+neuralspace-lang-detection-auth:
+    ACCESS_TOKEN: ""
+    neuralspace_lang_detect_url: "https://platform-dev.neuralspace.ai/api/language-detection/v1/detect"
+
+twitter-query:
+    USER_HANDLE: ""
+    TOP_NUM_TWEETS: ""
+    TOP_NUM_COMMENTS: ""
+
+training-data:
+    languages: ["en", "hi", "mr"]
+
+download-report: False
+
+pass-userhandle: True
+
+pass-tweet-url: False
+
