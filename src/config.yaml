@@ -7,11 +7,11 @@ twitter-auth:
 neuralspace-nlu-auth:
     MODEL_ID: ""
     ACCESS_TOKEN: ""
-    neuralspace_nlu_url: "https://platform-dev.neuralspace.ai/api/nlu/v1/model/parse"
+    neuralspace_nlu_url: "https://platform.neuralspace.ai/api/nlu/v1/model/parse"
 
 neuralspace-lang-detection-auth:
     ACCESS_TOKEN: ""
-    neuralspace_lang_detect_url: "https://platform-dev.neuralspace.ai/api/language-detection/v1/detect"
+    neuralspace_lang_detect_url: "https://platform.neuralspace.ai/api/language-detection/v1/detect"
 
 twitter-query:
     USER_HANDLE: ""
