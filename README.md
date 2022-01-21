@@ -52,7 +52,7 @@ To create the authentication credentials, go to your Twitter apps page. Here’s
 Here you’ll find the Dashboard button of your app. Clicking this button takes you to the next page, where you can generate the credentials.
 
 By selecting the Keys and tokens tab, you can generate and copy the key, token, and secrets to use them in your code:
-![twitter-credentials](ns-twitter-2.png)
+![twitter-credentials](images/ns-twitter-2.png)
 After generating the credentials, save them in the `config.yaml` file to later use them in your code.
 
 ## Other credentials to pass through config.yaml
