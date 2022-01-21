@@ -65,8 +65,15 @@ For NeuralSpace NeuraLingo and Language Detection Authentication, you need the f
 The `MODEL_ID` is extracted from the trained HateSpeech model from the Colab Notebook. The `ACCESS_TOKEN` can be extracted in two ways. 
 
 ### Extracting ACCESS_TOKEN using CLI
-After you login to neuralspace from the CLI using your emailID and password, you will find a link at the bottom where your credentials are saved. Open that and copy paste to the `config.yaml` file under neuralspace-lang-detection-auth and neuralspace-nlu-auth. 
+After you login to neuralspace from the CLI using your emailID and password, you will find a link at the bottom where your credentials are saved. Open that and copy paste to the `config.yaml` file under `neuralspace-lang-detection-auth` and `neuralspace-nlu-auth`. 
 ![alt text](images/ns-cli-access-token.png)
 
 ### Extracting ACCESS_TOEKN using Platform
-After you login to the Platform, you will find the ACCESS_TOKEN at the top right of the screen beside `Shortcuts` and `API_KEY`. Copy the ACCESS_TOKEN and paste to the `config.yaml` file under neuralspace-lang-detection-auth and neuralspace-nlu-auth.
+After you login to the Platform, you will find the ACCESS_TOKEN at the top right of the screen beside `Shortcuts` and `API_KEY`. Copy the ACCESS_TOKEN and paste to the `config.yaml` file under `neuralspace-lang-detection-auth` and `neuralspace-nlu-auth`.
+
+## All ready
+If you would like to classify the top n tweets for a specific Twitter user_handle, enter the handle and the count in the config file under `twitter-query`. 
+
+Then you are all-set. 
+
+Run ```python src/neuralspace_nlu_bot.py```
