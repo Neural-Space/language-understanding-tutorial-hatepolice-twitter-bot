@@ -1,3 +1,4 @@
+from asyncore import write
 import re
 import tweepy
 from tweepy import OAuthHandler
@@ -137,6 +138,10 @@ def main_pass_userhandle(config):
         count_top = config["twitter-query"]["TOP_NUM_TWEETS"]
     )
 
+    print("#"*200)
+    print("NeuralSpace Twitter HateSpeech Bot")
+    print("#"*200)
+    
     print("Here are the " + 
         str(config["twitter-query"]["TOP_NUM_TWEETS"]) +
         " most recent tweets by " + 
@@ -150,8 +155,29 @@ def main_pass_userhandle(config):
         else:
             print(tweet["text"])
 
-def main_pass_tweeturl(config):
-    return 0
+    if config["report"] is True:
+        f = open(config["report"]["report-filename"], "w")
+        f.write("#"*200, "\n")
+        f.write("NeuralSpace Twitter HateSpeech Bot", "\n")
+        f.write("#"*200, "\n")
+        f.write("Here are the " + 
+        str(config["twitter-query"]["TOP_NUM_TWEETS"]) +
+        " most recent tweets by " + 
+        str(config["twitter-query"]["USER_HANDLE"]), "\n")
+        for i, tweet in enumerate(tweets):
+            f.write("----> Tweet: ", i+1, "\n")
+            if tweet["intent"] == "hate_and_offensive":
+                f.write("This tweet cannot be displayed since it contains hate and offensive text", "\n")
+            else:
+                f.write(tweet["text"], "\n")
+        print("Report has been saved!")
+
+# def main_pass_tweeturl(config):
+#     # creating object of TwitterClient Class
+#     api = TwitterClient(config)
+
+#     tweet = api.get_oembed(config["twitter-query"]["TWITTER_URL"])
+#     return 0
 
 def main():
     with open("config.yaml", "r") as yamlfile:
@@ -160,17 +186,14 @@ def main():
     if config["pass-userhandle"] is True:
         main_pass_userhandle(config)
     
-    if config["pass-tweet-url"] is True:
-        main_pass_tweeturl(config)
+    # if config["pass-tweet-url"] is True:
+        # main_pass_tweeturl(config)
     
     if config["pass-userhandle"] is False and config["pass-tweet-url"] is False:
         print("Please check your config file. Choose atleast one task.")
 
 
 if __name__ == "__main__":
-    print("#"*200)
-    print("NeuralSpace Twitter HateSpeech Bot")
-    print("#"*200)
-
+    
     main()
 

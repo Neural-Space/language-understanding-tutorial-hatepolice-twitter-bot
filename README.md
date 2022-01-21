@@ -3,6 +3,10 @@ This repository contains a tutorial to build a Twitter Bot that classifies hate 
 
 Let us get started!
 
+## Train your model using NeuralSpace NeuraLingo.
+You must first train your hatespeech model so that you can pass this it through the twitter bot. 
+Follow our [Colab repository](https://drive.google.com/file/d/1nMVVnfKmddPQISUr4JKPR71HGLYksab9/view?usp=sharing) to easily build and train your model. 
+
 ## Install requirements
 
 To make the Twitter Bot in Python, we will need to install some packages. Let us make a conda environment. You can use Python >=3.6.
@@ -72,7 +76,7 @@ After you login to neuralspace from the CLI using your emailID and password, you
 After you login to the Platform, you will find the ACCESS_TOKEN at the top right of the screen beside `Shortcuts` and `API_KEY`. Copy the ACCESS_TOKEN and paste to the `config.yaml` file under `neuralspace-lang-detection-auth` and `neuralspace-nlu-auth`.
 
 ## All ready
-If you would like to classify the top n tweets for a specific Twitter user_handle, enter the handle and the count in the config file under `twitter-query`. 
+If you would like to classify the top n tweets for a specific Twitter user_handle, enter the handle and the count in the config file under `twitter-query`. If you would like to see the hate-score of a specific tweet and the corresponding n comments, enter the TOP_NUM_COMMENTS value as well.
 
 Then you are all-set. 
 

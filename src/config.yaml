@@ -17,11 +17,14 @@ twitter-query:
     USER_HANDLE: ""
     TOP_NUM_TWEETS: ""
     TOP_NUM_COMMENTS: ""
+    TWITTER_URL: ""
 
 training-data:
     languages: ["en", "hi", "mr"]
 
-download-report: False
+report: 
+    download-report: False
+    report-filename: "report.txt"
 
 pass-userhandle: True
 
