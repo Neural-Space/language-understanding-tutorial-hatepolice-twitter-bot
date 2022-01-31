@@ -4,6 +4,7 @@ from tweepy import OAuthHandler
 import requests
 import json
 import yaml
+import csv
 
 class TwitterClient(object):
     def __init__(self, config):
@@ -145,8 +146,6 @@ def main_pass_userhandle(config):
     # creating object of TwitterClient Class
     api = TwitterClient(config)
     
-    # calling function to get tweets
-    
     user_handle = config["twitter-query"]["USER_HANDLE"]
     count_top = config["twitter-query"]["RECENT_NUM_TWEETS"]
 
@@ -163,38 +162,38 @@ def main_pass_userhandle(config):
     
     hate_count = 0
     confidence_score = 0
+    tweets_all = []
     for i, tweet in enumerate(tweets):
+        tweet_info = []
+        tweet_info.append("Tweet: " + str(i+1))
+        tweet_info.append(config["twitter-query"]["USER_HANDLE"])
         print("----> Tweet: ", i+1)
-        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["threshold-roc"]:
+        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["control-precision"]["threshold-roc"]:
+            tweet_info.append("hate_and_offensive")
+            tweet_info.append(tweet["confidence"])
+            tweet_info.append("This tweet cannot be displayed since it contains hate and offensive text")
             hate_count +=1
             confidence_score += tweet["confidence"]
-            print("This tweet cannot be displayed since it contains hate and offensive text")
+            print("Intent predicted ->  hate and offensive")
         else:
-            print(tweet["text"])
+            tweet_info.append("no_hate")
+            tweet_info.append(tweet["confidence"])
+            tweet_info.append(tweet["text"])
+            print("Intent predicted ->  no hate")
+        tweets_all.append(tweet_info)
 
     print("="*100)
     print(str(hate_count)+" tweets out of "+ str(len(tweets)) +" have been classified as hate and offensive!")
     if hate_count > 0:
         print("Average predicted confidence scores of hate tweets is : " + str(confidence_score/hate_count))
     print("="*100)
-
+    
     if config["report"]["download-report"] is True:
-        f = open(config["report"]["report-filename-pass-userhandle"], "w")
-        f.write("#"*100)
-        f.write("\n NeuralSpace Twitter HateSpeech Bot \n")
-        f.write("#"*100)
-        f.write("\n Here are the " + 
-        str(config["twitter-query"]["RECENT_NUM_TWEETS"]) +
-        " most recent tweets by " + 
-        str(config["twitter-query"]["USER_HANDLE"]) + "\n")
-        f.write("-"*50 + "\n")
-        for i, tweet in enumerate(tweets):
-            f.write("----> Tweet: " + str(i+1))
-            if tweet["intent"] == "hate_and_offensive":
-                f.write("\nThis tweet cannot be displayed since it contains hate and offensive text \n")
-            else:
-                f.write("\n" + tweet["text"] + "\n")
-            f.write("-"*50 + "\n")
+        with open(config["report"]["report-filename-pass-userhandle"], 'w', encoding='UTF8', newline='') as f:
+            header = ['tweet_no.', 'Twitter UserHandle', 'Predicted Intent', 'Predicted Confidence Score', 'Tweet']
+            writer = csv.writer(f)
+            writer.writerow(header)
+            writer.writerows(tweets_all)
         print("Report has been saved!")
 
 def main_pass_tweeturl(config):
@@ -208,14 +207,26 @@ def main_pass_tweeturl(config):
         " most recent tweets")
     hate_count = 0
     confidence_score = 0
+    tweets_all = []
     for i, tweet in enumerate(tweets):
         print("----> Tweet: ", i+1)
-        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["threshold-roc"]:
+        tweet_info = []
+        tweet_info.append("Tweet: " + str(i+1))
+        tweet_info.append(config["twitter-query"]["TWITTER_URL"])
+        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["control-precision"]["threshold-roc"]:
+            tweet_info.append("hate_and_offensive")
+            tweet_info.append(tweet["confidence"])
+            tweet_info.append("This tweet cannot be displayed since it contains hate and offensive text")
             hate_count +=1
             confidence_score += tweet["confidence"]
-            print("This tweet cannot be displayed since it contains hate and offensive text")
+            print("Intent predicted ->  hate and offensive")
         else:
-            print(tweet["text"])
+            tweet_info.append("no_hate")
+            tweet_info.append(tweet["confidence"])
+            tweet_info.append(tweet["text"])
+            print("Intent predicted ->  no hate")
+        tweets_all.append(tweet_info)
+    
     print("="*100)
     print(str(hate_count)+" tweets out of "+ str(len(tweets)) +" have been classified as hate and offensive!")
     if hate_count > 0:
@@ -223,24 +234,13 @@ def main_pass_tweeturl(config):
     print("="*100)
     
     if config["report"]["download-report"] is True:
-        f = open(config["report"]["report-filename-pass-url"], "w")
-        f.write("#"*100)
-        f.write("\n NeuralSpace Twitter HateSpeech Bot \n")
-        f.write("#"*100)
-        f.write("\n Here are the " + 
-            str(config["twitter-query"]["RECENT_NUM_COMMENTS"]) +
-            " most recent comments across this url " + 
-            str(config["twitter-query"]["USER_HANDLE"]) + "\n")
-        f.write("-"*50 + "\n")
-        for i, tweet in enumerate(tweets):
-            f.write("----> Comments: " + str(i+1))
-            if tweet["intent"] == "hate_and_offensive":
-                f.write("\nThis tweet cannot be displayed since it contains hate and offensive text \n")
-            else:
-                f.write("\n" + tweet["text"] + "\n")
-            f.write("-"*50 + "\n")
+        with open(config["report"]["report-filename-pass-url"], 'w', encoding='UTF8', newline='') as f:
+            header = ['tweet_no.', 'Twitter URL', 'Predicted Intent', 'Predicted Confidence Score', 'Comment']
+            writer = csv.writer(f)
+            writer.writerow(header)
+            writer.writerows(tweets_all)
         print("Report has been saved!")
-
+    
 def main():
     with open("config.yaml", "r") as yamlfile:
         config = yaml.load(yamlfile, Loader=yaml.FullLoader)

@@ -22,7 +22,7 @@ def ns_nlu_hatespeech(config, text):
         
         payload_values["modelId"] = MODEL_ID
         payload_values["text"] = text
-        # print(text)
+        
         payload = json.dumps(payload_values)
 
         headers = {
@@ -58,11 +58,11 @@ def find_optimal_threshold(y_true, y_pred):
     return list(roc_t['threshold']) 
 
 # Reading config file for MODELID and ACCESS_TOKEN
-with open("config.yaml", "r") as yamlfile:
+with open("../config.yaml", "r") as yamlfile:
     config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 # Reading validation data
-f = open('neuralingo_nlu_hatespeech_tutorial_data_val.json')
+f = open('../../data/neuralingo_nlu_hatespeech_tutorial_data_val.json')
 data = json.load(f)
 
 # Saving true labels
