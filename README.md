@@ -1,6 +1,23 @@
 # NeuraLingo-Tutorial-TwitterBot-HateSpeech
 This repository contains a tutorial to build a Twitter Bot that classifies hate and offensive tweets using NeuralSpace's NeuraLingo (NLU) API.  
 
+<p align="center">
+   <img src="images/ns-hatespeech-alarming.png" alt="[YOUR_ALT]"/>
+</p>
+
+News Article References:
+1. https://indianexpress.com/article/technology/social/facebook-whistleblower-data-scientist-frances-haugen-india-content-7556811/
+2. https://timesofindia.indiatimes.com/blogs/toi-edit-page/there-is-a-pandemic-of-fake-news-and-hate-on-social-media-you-can-help-fight-it/
+3. https://www.aljazeera.com/opinions/2020/11/12/how-social-media-regulations-are-silencing-dissent-in-africa
+4. https://www.arabnews.com/node/1944116/media 
+5. https://www.hindustantimes.com/analysis/it-is-time-to-regulate-hate-speech-on-social-media/story-x2JfnAcZ4mh404CM2wQLpO.html
+6. https://www.newstatesman.com/spotlight/2021/09/does-how-you-talk-to-your-ai-assistant-matter
+7. https://economictimes.indiatimes.com/tech/technology/twitter-loses-online-hate-speech-court-battle-in-france/articleshow/89034064.cms 
+
+With a rise in the number of posts made on social media, an increase in the amount of toxic content on the web is witnessed. Measures to detect such instances of toxicity is of paramount importance in today’s world with regards to keeping the web a safe and healthy environment for all. Detecting multilingual hateful and offensive content in typical posts and comments found on the web is the first step towards building a system which can flag items with possible adverse effects and take steps necessary to handle such behavior.
+
+Can NeuralSpace Apps be used as a stepping stone to solve this alarming problem to flag multilingual hatespeech?
+
 Let us get started!
 
 ## 1. Train your model using [NeuralSpace NeuraLingo](https://docs.neuralspace.ai/natural-language-understanding/overview).
