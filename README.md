@@ -6,13 +6,13 @@ This repository contains a tutorial to build a Twitter Bot that classifies hate 
 </p>
 
 News Article References:
-1. https://indianexpress.com/article/technology/social/facebook-whistleblower-data-scientist-frances-haugen-india-content-7556811/
-2. https://timesofindia.indiatimes.com/blogs/toi-edit-page/there-is-a-pandemic-of-fake-news-and-hate-on-social-media-you-can-help-fight-it/
-3. https://www.aljazeera.com/opinions/2020/11/12/how-social-media-regulations-are-silencing-dissent-in-africa
-4. https://www.arabnews.com/node/1944116/media 
-5. https://www.hindustantimes.com/analysis/it-is-time-to-regulate-hate-speech-on-social-media/story-x2JfnAcZ4mh404CM2wQLpO.html
-6. https://www.newstatesman.com/spotlight/2021/09/does-how-you-talk-to-your-ai-assistant-matter
-7. https://economictimes.indiatimes.com/tech/technology/twitter-loses-online-hate-speech-court-battle-in-france/articleshow/89034064.cms 
+1. [Indian Express - Facebook didn’t flag India hate content because it lacked tools: Whistleblower](https://indianexpress.com/article/technology/social/facebook-whistleblower-data-scientist-frances-haugen-india-content-7556811/)
+2. [Time of India - There is a pandemic of fake news and hate on social media. You can help fight it](https://timesofindia.indiatimes.com/blogs/toi-edit-page/there-is-a-pandemic-of-fake-news-and-hate-on-social-media-you-can-help-fight-it/)
+3. [Aljazeera - How social media regulations are silencing dissent in Africa](https://www.aljazeera.com/opinions/2020/11/12/how-social-media-regulations-are-silencing-dissent-in-africa)
+4. [Arab News - Social media platforms doing little to combat online hate speech in the Arab world: Experts](https://www.arabnews.com/node/1944116/media)
+5. [Hindustan Times - It is time to regulate hate speech on social media](https://www.hindustantimes.com/analysis/it-is-time-to-regulate-hate-speech-on-social-media/story-x2JfnAcZ4mh404CM2wQLpO.html)
+6. [The New Stateman - Does how you talk to your AI assistant matter?](https://www.newstatesman.com/spotlight/2021/09/does-how-you-talk-to-your-ai-assistant-matter)
+7. [Economic Times - Twitter loses online hate speech court battle in France](https://economictimes.indiatimes.com/tech/technology/twitter-loses-online-hate-speech-court-battle-in-france/articleshow/89034064.cms) 
 
 With a rise in the number of posts made on social media, an increase in the amount of toxic content on the web is witnessed. Measures to detect such instances of toxicity is of paramount importance in today’s world with regards to keeping the web a safe and healthy environment for all. Detecting multilingual hateful and offensive content in typical posts and comments found on the web is the first step towards building a system which can flag items with possible adverse effects and take steps necessary to handle such behavior.
 

@@ -5,6 +5,7 @@ import requests
 import json
 import yaml
 import csv
+import tqdm 
 
 class TwitterClient(object):
     def __init__(self, config):
@@ -110,7 +111,8 @@ class TwitterClient(object):
     def calculate_intent(self, config, fetched_tweets, userhandle=True):
 		# parsing tweets one by one
         tweets = []
-        for tweet in fetched_tweets:
+        print(fetched_tweets)
+        for tweet in tqdm.tqdm(fetched_tweets):
             if userhandle == True:
                 tweet = tweet.text
             detected_lang = self.ns_language_detection(config, tweet)
@@ -135,12 +137,17 @@ class TwitterClient(object):
         name = url.split('/')[-3]
         tweet_id = url.split('/')[-1]
         top_comments = config["twitter-query"]["RECENT_NUM_COMMENTS"]
+        
         replies=[]
-        for tweet in tweepy.Cursor(self.api.search,q='to:'+name, result_type='recent').items(top_comments):
+        print("here")
+        for tweet in tweepy.Cursor(self.api.search,q='to:'+name, result_type='recent').items():
             if hasattr(tweet, 'in_reply_to_status_id_str'):
                 if (tweet.in_reply_to_status_id_str==tweet_id):
-                    replies.append(tweet._json['text'])
+                    if len(replies) < top_comments:
+                        replies.append(tweet._json['text'])
+                        print(len(replies))
         return replies
+    
         
 def main_pass_userhandle(config):
     # creating object of TwitterClient Class
@@ -168,13 +175,14 @@ def main_pass_userhandle(config):
         tweet_info.append("Tweet: " + str(i+1))
         tweet_info.append(config["twitter-query"]["USER_HANDLE"])
         print("----> Tweet: ", i+1)
-        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["control-precision"]["threshold-roc"]:
-            tweet_info.append("hate_and_offensive")
-            tweet_info.append(tweet["confidence"])
-            tweet_info.append("This tweet cannot be displayed since it contains hate and offensive text")
-            hate_count +=1
-            confidence_score += tweet["confidence"]
-            print("Intent predicted ->  hate and offensive")
+        if tweet["intent"] == "hate_and_offensive":
+            if tweet["confidence"] >= config["control-precision"]["threshold-roc"]:
+                tweet_info.append("hate_and_offensive")
+                tweet_info.append(tweet["confidence"])
+                tweet_info.append(tweet["text"])
+                hate_count +=1
+                confidence_score += tweet["confidence"]
+                print("Intent predicted ->  hate and offensive")
         else:
             tweet_info.append("no_hate")
             tweet_info.append(tweet["confidence"])
@@ -190,7 +198,7 @@ def main_pass_userhandle(config):
     
     if config["report"]["download-report"] is True:
         with open(config["report"]["report-filename-pass-userhandle"], 'w', encoding='UTF8', newline='') as f:
-            header = ['tweet_no.', 'Twitter UserHandle', 'Predicted Intent', 'Predicted Confidence Score', 'Tweet']
+            header = ['tweet_no.', 'Twitter UserHandle', 'Predicted Intent', 'Confidence of Predicted Intent', 'Tweet']
             writer = csv.writer(f)
             writer.writerow(header)
             writer.writerows(tweets_all)
@@ -213,13 +221,14 @@ def main_pass_tweeturl(config):
         tweet_info = []
         tweet_info.append("Tweet: " + str(i+1))
         tweet_info.append(config["twitter-query"]["TWITTER_URL"])
-        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["control-precision"]["threshold-roc"]:
-            tweet_info.append("hate_and_offensive")
-            tweet_info.append(tweet["confidence"])
-            tweet_info.append("This tweet cannot be displayed since it contains hate and offensive text")
-            hate_count +=1
-            confidence_score += tweet["confidence"]
-            print("Intent predicted ->  hate and offensive")
+        if tweet["intent"] == "hate_and_offensive":
+            if tweet["confidence"] >= config["control-precision"]["threshold-roc"]:
+                tweet_info.append("hate_and_offensive")
+                tweet_info.append(tweet["confidence"])
+                tweet_info.append("This tweet cannot be displayed since it contains hate and offensive text")
+                hate_count +=1
+                confidence_score += tweet["confidence"]
+                print("Intent predicted ->  hate and offensive")
         else:
             tweet_info.append("no_hate")
             tweet_info.append(tweet["confidence"])
@@ -235,7 +244,7 @@ def main_pass_tweeturl(config):
     
     if config["report"]["download-report"] is True:
         with open(config["report"]["report-filename-pass-url"], 'w', encoding='UTF8', newline='') as f:
-            header = ['tweet_no.', 'Twitter URL', 'Predicted Intent', 'Predicted Confidence Score', 'Comment']
+            header = ['tweet_no.', 'Twitter URL', 'Predicted Intent', 'Confidence of Predicted Intent', 'Comment']
             writer = csv.writer(f)
             writer.writerow(header)
             writer.writerows(tweets_all)
