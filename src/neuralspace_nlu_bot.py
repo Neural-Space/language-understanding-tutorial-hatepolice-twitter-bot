@@ -1,4 +1,3 @@
-from asyncore import write
 import re
 import tweepy
 from tweepy import OAuthHandler
@@ -21,7 +20,7 @@ class TwitterClient(object):
 			# set access token and secret
             self.auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 			# create tweepy API object to fetch tweets
-            self.api = tweepy.API(self.auth)
+            self.api = tweepy.API(self.auth, wait_on_rate_limit=True)
         except:
             print("Error: Authentication Failed")
 
@@ -85,8 +84,8 @@ class TwitterClient(object):
             payload = {}
             url = config["neuralspace-lang-detection-auth"]["neuralspace_lang_detect_url"]
             ACCESS_TOKEN = config["neuralspace-lang-detection-auth"]["ACCESS_TOKEN"]
-        
-            payload["text"] = self.clean_tweet(tweet.text)
+
+            payload["text"] = self.clean_tweet(tweet)
             headers = {
             'authorization': ACCESS_TOKEN,
             }
@@ -97,26 +96,29 @@ class TwitterClient(object):
                 data=payload).text
             )
             detected_lang = response["data"]["detected_languages"][0]["language"]
-            
             return detected_lang
         
         except:
             print("Error: NeuralSpace Language Detection failed. Please check your ACCESS_TOKEN.")
 
-    def get_tweets(self, config, user_handle, count_top):
-        tweets = []
+    def get_tweets(self, user_handle, count_top):
         # call twitter api to fetch tweets
-        fetched_tweets = self.api.user_timeline(screen_name = user_handle, count=count_top)
-        
+        fetched_tweets = self.api.user_timeline(screen_name = user_handle, count=count_top, exclude_replies=False)
+        return fetched_tweets
+    
+    def calculate_intent(self, config, fetched_tweets, userhandle=True):
 		# parsing tweets one by one
+        tweets = []
         for tweet in fetched_tweets:
+            if userhandle == True:
+                tweet = tweet.text
             detected_lang = self.ns_language_detection(config, tweet)
             
             #Check if detected_lang is belongs to list of training data langauges.
             if detected_lang in config["training-data"]["languages"]:
                 parsed_tweet = {}
-                parsed_tweet['text'] = tweet.text
-                intent, confidence = self.ns_nlu_hatespeech(config, tweet.text)
+                parsed_tweet['text'] = tweet
+                intent, confidence = self.ns_nlu_hatespeech(config, tweet)
                 parsed_tweet["intent"] = intent
                 parsed_tweet["confidence"] = confidence
                 tweets.append(parsed_tweet)
@@ -126,74 +128,138 @@ class TwitterClient(object):
                 print("Please add training data in this language if you wish to classify this tweet")
         
         return tweets
-
+    
+    def get_tweets_from_url(self, config):
+        url = config["twitter-query"]["TWITTER_URL"]
+        name = url.split('/')[-3]
+        tweet_id = url.split('/')[-1]
+        top_comments = config["twitter-query"]["RECENT_NUM_COMMENTS"]
+        replies=[]
+        for tweet in tweepy.Cursor(self.api.search,q='to:'+name, result_type='recent').items(top_comments):
+            if hasattr(tweet, 'in_reply_to_status_id_str'):
+                if (tweet.in_reply_to_status_id_str==tweet_id):
+                    replies.append(tweet._json['text'])
+        return replies
+        
 def main_pass_userhandle(config):
     # creating object of TwitterClient Class
     api = TwitterClient(config)
     
     # calling function to get tweets
-    tweets = api.get_tweets(
-        config, 
-        user_handle = config["twitter-query"]["USER_HANDLE"], 
-        count_top = config["twitter-query"]["TOP_NUM_TWEETS"]
-    )
-
-    print("#"*200)
-    print("NeuralSpace Twitter HateSpeech Bot")
-    print("#"*200)
     
+    user_handle = config["twitter-query"]["USER_HANDLE"]
+    count_top = config["twitter-query"]["RECENT_NUM_TWEETS"]
+
+    tweets = api.get_tweets(
+        user_handle, count_top
+    )
+    tweets = api.calculate_intent(config, tweets, userhandle=True)
+
     print("Here are the " + 
-        str(config["twitter-query"]["TOP_NUM_TWEETS"]) +
+        str(config["twitter-query"]["RECENT_NUM_TWEETS"]) +
         " most recent tweets by " + 
         str(config["twitter-query"]["USER_HANDLE"])
     )
     
+    hate_count = 0
+    confidence_score = 0
     for i, tweet in enumerate(tweets):
         print("----> Tweet: ", i+1)
-        if tweet["intent"] == "hate_and_offensive":
+        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["threshold-roc"]:
+            hate_count +=1
+            confidence_score += tweet["confidence"]
             print("This tweet cannot be displayed since it contains hate and offensive text")
         else:
             print(tweet["text"])
 
-    if config["report"] is True:
-        f = open(config["report"]["report-filename"], "w")
-        f.write("#"*200, "\n")
-        f.write("NeuralSpace Twitter HateSpeech Bot", "\n")
-        f.write("#"*200, "\n")
-        f.write("Here are the " + 
-        str(config["twitter-query"]["TOP_NUM_TWEETS"]) +
+    print("="*100)
+    print(str(hate_count)+" tweets out of "+ str(len(tweets)) +" have been classified as hate and offensive!")
+    if hate_count > 0:
+        print("Average predicted confidence scores of hate tweets is : " + str(confidence_score/hate_count))
+    print("="*100)
+
+    if config["report"]["download-report"] is True:
+        f = open(config["report"]["report-filename-pass-userhandle"], "w")
+        f.write("#"*100)
+        f.write("\n NeuralSpace Twitter HateSpeech Bot \n")
+        f.write("#"*100)
+        f.write("\n Here are the " + 
+        str(config["twitter-query"]["RECENT_NUM_TWEETS"]) +
         " most recent tweets by " + 
-        str(config["twitter-query"]["USER_HANDLE"]), "\n")
+        str(config["twitter-query"]["USER_HANDLE"]) + "\n")
+        f.write("-"*50 + "\n")
         for i, tweet in enumerate(tweets):
-            f.write("----> Tweet: ", i+1, "\n")
+            f.write("----> Tweet: " + str(i+1))
             if tweet["intent"] == "hate_and_offensive":
-                f.write("This tweet cannot be displayed since it contains hate and offensive text", "\n")
+                f.write("\nThis tweet cannot be displayed since it contains hate and offensive text \n")
             else:
-                f.write(tweet["text"], "\n")
+                f.write("\n" + tweet["text"] + "\n")
+            f.write("-"*50 + "\n")
         print("Report has been saved!")
 
-# def main_pass_tweeturl(config):
-#     # creating object of TwitterClient Class
-#     api = TwitterClient(config)
+def main_pass_tweeturl(config):
+    # creating object of TwitterClient Class
+    api = TwitterClient(config)
+    tweet_replies = api.get_tweets_from_url(config)
+    tweets = api.calculate_intent(config, tweet_replies, userhandle=False)
 
-#     tweet = api.get_oembed(config["twitter-query"]["TWITTER_URL"])
-#     return 0
+    print("Here are the " + 
+        str(config["twitter-query"]["RECENT_NUM_COMMENTS"]) +
+        " most recent tweets")
+    hate_count = 0
+    confidence_score = 0
+    for i, tweet in enumerate(tweets):
+        print("----> Tweet: ", i+1)
+        if tweet["intent"] == "hate_and_offensive" and tweet["confidence"] >= config["threshold-roc"]:
+            hate_count +=1
+            confidence_score += tweet["confidence"]
+            print("This tweet cannot be displayed since it contains hate and offensive text")
+        else:
+            print(tweet["text"])
+    print("="*100)
+    print(str(hate_count)+" tweets out of "+ str(len(tweets)) +" have been classified as hate and offensive!")
+    if hate_count > 0:
+        print("Average predicted confidence scores of hate tweets is : " + str(confidence_score/hate_count))
+    print("="*100)
+    
+    if config["report"]["download-report"] is True:
+        f = open(config["report"]["report-filename-pass-url"], "w")
+        f.write("#"*100)
+        f.write("\n NeuralSpace Twitter HateSpeech Bot \n")
+        f.write("#"*100)
+        f.write("\n Here are the " + 
+            str(config["twitter-query"]["RECENT_NUM_COMMENTS"]) +
+            " most recent comments across this url " + 
+            str(config["twitter-query"]["USER_HANDLE"]) + "\n")
+        f.write("-"*50 + "\n")
+        for i, tweet in enumerate(tweets):
+            f.write("----> Comments: " + str(i+1))
+            if tweet["intent"] == "hate_and_offensive":
+                f.write("\nThis tweet cannot be displayed since it contains hate and offensive text \n")
+            else:
+                f.write("\n" + tweet["text"] + "\n")
+            f.write("-"*50 + "\n")
+        print("Report has been saved!")
 
 def main():
     with open("config.yaml", "r") as yamlfile:
         config = yaml.load(yamlfile, Loader=yaml.FullLoader)
     
     if config["pass-userhandle"] is True:
+        print("Extracting the tweets ...")
         main_pass_userhandle(config)
     
-    # if config["pass-tweet-url"] is True:
-        # main_pass_tweeturl(config)
+    if config["pass-tweet-url"] is True:
+        main_pass_tweeturl(config)
     
     if config["pass-userhandle"] is False and config["pass-tweet-url"] is False:
         print("Please check your config file. Choose atleast one task.")
 
 
 if __name__ == "__main__":
+    print("#"*100)
+    print("NeuralSpace Twitter HateSpeech Bot")
+    print("#"*100)
     
     main()
 

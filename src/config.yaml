@@ -15,18 +15,24 @@ neuralspace-lang-detection-auth:
 
 twitter-query:
     USER_HANDLE: ""
-    TOP_NUM_TWEETS: ""
-    TOP_NUM_COMMENTS: ""
+    RECENT_NUM_TWEETS: 
+    RECENT_NUM_COMMENTS: 
     TWITTER_URL: ""
 
 training-data:
     languages: ["en", "hi", "mr"]
 
+control-precision:
+    set-threshold: True
+    threshold-roc: 
+
 report: 
-    download-report: False
-    report-filename: "report.txt"
+    download-report: True
+    report-filename-pass-userhandle: "report1.txt"
+    report-filename-pass-url: "report2.txt"
 
 pass-userhandle: True
 
-pass-tweet-url: False
+pass-tweet-url: True
+
 
