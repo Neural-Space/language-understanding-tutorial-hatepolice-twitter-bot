@@ -62,7 +62,7 @@ with open("../config.yaml", "r") as yamlfile:
     config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 # Reading validation data
-f = open('../../data/Language Understanding_nlu_hatespeech_tutorial_data_val.json')
+f = open('../../data/language_understanding_nlu_hatespeech_tutorial_data_val.json')
 data = json.load(f)
 
 # Saving true labels
