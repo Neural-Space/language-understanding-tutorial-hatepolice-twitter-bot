@@ -1,5 +1,5 @@
-# HatePolice Twitter Bot - NeuraLingo Tutorial
-This repository contains a tutorial to build a Twitter Bot that classifies hate and offensive tweets using NeuralSpace's NeuraLingo (NLU) API.  
+# HatePolice Twitter Bot - Language Understanding Tutorial
+This repository contains a tutorial to build a Twitter Bot that classifies hate and offensive tweets using NeuralSpace's Language Understanding (NLU) API.  
 
 <p align="center">
    <img src="images/ns-hatespeech-alarming.png" alt="[YOUR_ALT]"/>
@@ -20,8 +20,8 @@ Can NeuralSpace Apps be used as a stepping stone to solve this alarming problem 
 
 Let us get started!
 
-## 1. Train your model using [NeuralSpace NeuraLingo](https://docs.neuralspace.ai/natural-language-understanding/overview).
-Let us first train a hatespeech model using NeuralSpace NeuraLingo (Natural Language Understaning) App. To do this, follow our our [Colab repository](https://drive.google.com/file/d/1nMVVnfKmddPQISUr4JKPR71HGLYksab9/view?usp=sharing) to easily build and train your model.
+## 1. Train your model using [NeuralSpace Language Understanding](https://docs.neuralspace.ai/natural-language-understanding/overview).
+Let us first train a hatespeech model using NeuralSpace Language Understanding (Natural Language Understaning) App. To do this, follow our our [Colab repository](https://drive.google.com/file/d/1nMVVnfKmddPQISUr4JKPR71HGLYksab9/view?usp=sharing) to easily build and train your model.
 
 ## 2. Install requirements
 
@@ -85,7 +85,7 @@ Let us move to the next steps
 ## 4. Other credentials to pass through config.yaml
 
 To run the twitter bot, there are some other credentials that you must save. 
-For NeuralSpace NeuraLingo and Language Detection Authentication, you need the following. 
+For NeuralSpace Language Understanding and Language Detection Authentication, you need the following. 
 - MODEL_ID
 - ACCESS_TOKEN
 
@@ -101,7 +101,7 @@ After you login to neuralspace from the CLI using your emailID and password, you
 ### Extracting access token using Platform
 After you login to the Platform, you will find the ACCESS_TOKEN at the top right of the screen beside `Shortcuts` and `API_KEY`. Copy the ACCESS_TOKEN and paste to the `config.yaml` file in `src` folder under `neuralspace-lang-detection-auth` and `neuralspace-nlu-auth`.
 
-Congratulations you have now successfully authenticated your twitter bot and linked NeuralSpace NeuraLingo App to the bot!
+Congratulations you have now successfully authenticated your twitter bot and linked NeuralSpace Language Understanding App to the bot!
 <p align="center">
    <img src="images/yayy-happy.gif" alt="[YOUR_ALT]"/>
 </p>
@@ -136,8 +136,8 @@ python neuralspace_nlu_bot.py
 
 ## 8. Share on Social Media 👏👏
 Wasn't that quick and easy to do! Would you like to share our tutorial this with your network on social media?
-- **Share on LinkedIn**: [Click here](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/Neural-Space/NeuraLingo-Tutorial-TwitterBot-HateSpeech=I%20built%20a%20HateSpeech%20Twitter%20Bot%20using%20NeuralSpace%20Platform&source=Twitter)
-- **Share on Twitter**: [Click here](http://twitter.com/share?text=I%20built%20a%20HateSpeech%20Twitter%20Bot%20using%20@NeuralSpace%20Platform.%20It%20was%20so%20easy%20and%20quick.%20Try%20it%20out!&url=https://github.com/Neural-Space/NeuraLingo-Tutorial-TwitterBot-HateSpeech&hashtags=NLProc,NeuralSpace)
+- **Share on LinkedIn**: [Click here](https://www.linkedin.com/sharing/share-offsite/?url=https://github.com/Neural-Space/rstanding-Tutorial-TwitterBot-HateSpeech=I%20built%20a%20HateSpeech%20Twitter%20Bot%20using%20NeuralSpace%20Platform&source=Twitter)
+- **Share on Twitter**: [Click here](http://twitter.com/share?text=I%20built%20a%20HateSpeech%20Twitter%20Bot%20using%20@NeuralSpace%20Platform.%20It%20was%20so%20easy%20and%20quick.%20Try%20it%20out!&url=https://github.com/Neural-Space/Language-Understanding-Tutorial-TwitterBot-HateSpeech&hashtags=NLProc,NeuralSpace)
 
 
 

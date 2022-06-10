@@ -42,7 +42,7 @@ class TwitterClient(object):
         '''
 		Utility function to classify whether the passed tweet 
         contains hate or offensive text 
-        using NeuralSpace NLU -> NeuraLingo
+        using NeuralSpace NLU -> Language Understanding
         https://docs.neuralspace.ai/natural-language-understanding/overview
 		'''
         try:
@@ -74,7 +74,7 @@ class TwitterClient(object):
             return predicted_intent, predicted_confidence
         
         except:
-            print("Error: NeuraLingo failed. Please check your ACCESS_TOKEN and MODEL_ID.")
+            print("Error: Language Understanding failed. Please check your ACCESS_TOKEN and MODEL_ID.")
 
     def ns_language_detection(self, config, tweet):
         '''
