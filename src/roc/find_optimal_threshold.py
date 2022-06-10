@@ -10,7 +10,7 @@ def ns_nlu_hatespeech(config, text):
     '''
 	Utility function to classify whether the passed tweet 
     contains hate or offensive text 
-    using NeuralSpace NLU -> NeuraLingo
+    using NeuralSpace NLU -> Language Understanding
     https://docs.neuralspace.ai/natural-language-understanding/overview
 	'''
     try:
@@ -41,7 +41,7 @@ def ns_nlu_hatespeech(config, text):
         return predicted_intent, predicted_confidence
     
     except:
-        print("Error: NeuraLingo failed. Please check your ACCESS_TOKEN and MODEL_ID.")
+        print("Error: Language Understanding failed. Please check your ACCESS_TOKEN and MODEL_ID.")
     
 def find_optimal_threshold(y_true, y_pred):
     """ Find the optimal probability cutoff point for a classification model related to event rate
@@ -62,7 +62,7 @@ with open("../config.yaml", "r") as yamlfile:
     config = yaml.load(yamlfile, Loader=yaml.FullLoader)
 
 # Reading validation data
-f = open('../../data/neuralingo_nlu_hatespeech_tutorial_data_val.json')
+f = open('../../data/language_understanding_nlu_hatespeech_tutorial_data_val.json')
 data = json.load(f)
 
 # Saving true labels
