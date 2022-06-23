@@ -21,7 +21,7 @@ Can NeuralSpace Apps be used as a stepping stone to solve this alarming problem 
 Let us get started!
 
 ## 1. Train your model using [NeuralSpace Language Understanding](https://docs.neuralspace.ai/natural-language-understanding/overview).
-Let us first train a hatespeech model using NeuralSpace Language Understanding (Natural Language Understaning) App. To do this, follow our our [Colab repository](https://drive.google.com/file/d/1nMVVnfKmddPQISUr4JKPR71HGLYksab9/view?usp=sharing) to easily build and train your model.
+Let us first train a hatespeech model using NeuralSpace Language Understanding (Natural Language Understaning) App. To do this, follow our our [Colab repository](https://colab.research.google.com/drive/1tPcn9RcxF9AS37HWpdJLCPNOSv98Mt9i?usp=sharing) to easily build and train your model.
 
 ## 2. Install requirements
 
